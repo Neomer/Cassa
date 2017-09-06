@@ -44,6 +44,11 @@ FORMS += \
 
 INCLUDEPATH += $$PWD
 
-INCLUDEPATH += "C:/libs/sqlite-amalgamation-3200100"
-
-LIBS += -L "C:/libs/sqlite-dll-win32-x86-3200100" -l sqlite3
+defined(win32) {
+    INCLUDEPATH += "C:/libs/sqlite-amalgamation-3200100"
+    LIBS += -L "C:/libs/sqlite-dll-win32-x86-3200100" -l sqlite3
+}
+if(linux-g++*):CONFIG(debug, debug|release)  {
+    INCLUDEPATH += /usr/include
+    LIBS += -L/usr/lib -L/usr/lib/nvidia-375 -lsqlite3 -lGL
+}

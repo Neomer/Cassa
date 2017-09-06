@@ -7,7 +7,7 @@
 class Context
 {
 public:
-    static Context instance()
+    static Context &instance()
     {
         static Context i;
         return i;
@@ -18,10 +18,12 @@ public:
     QDir databaseDirectory() { return _databasePath; }
     DatabaseConnection *defaultConnection() { return _dbconn; }
 
+private:
     Context();
     ~Context();
+    Context(const Context&);
+    void operator=(Context const&);
 
-private:
     QDir _databasePath;
     DatabaseConnection *_dbconn;
 };

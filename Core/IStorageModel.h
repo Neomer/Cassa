@@ -13,6 +13,7 @@ public:
     IStorageModel();
 
     bool get(int id);
+    bool save();
 
     virtual QString tableName() = 0;
 
