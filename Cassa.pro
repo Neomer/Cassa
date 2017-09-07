@@ -36,7 +36,8 @@ SOURCES += \
     Model/OrderDetails.cpp \
     ViewModel/FormMainViewModel.cpp \
     Core/GuiUtils.cpp \
-    ViewModel/FormOrderViewModel.cpp
+    ViewModel/FormOrderViewModel.cpp \
+    ViewModel/orderitemviewmodel.cpp
 
 HEADERS += \
     Core/Context.h \
@@ -50,7 +51,8 @@ HEADERS += \
     Model/OrderDetails.h \
     ViewModel/FormMainViewModel.h \
     Core/GuiUtils.h \
-    ViewModel/FormOrderViewModel.h
+    ViewModel/FormOrderViewModel.h \
+    ViewModel/orderitemviewmodel.h
 
 FORMS += \
     View/FormMain.ui \

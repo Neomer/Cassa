@@ -17,7 +17,10 @@ public:
     int count();
 
     bool first();
-    bool next();
+    bool next(bool *hasRows = 0);
+    bool at(int index);
+
+    bool eof();
 
     QVariant value(int column);
     QVariant value(QString column);
@@ -29,6 +32,9 @@ public:
 
 private:
     sqlite3_stmt *_stmt;
+    int _rows, _columns;
+    int _currentRow;
+    bool _eof;
 };
 
 #endif // DATABASEQUERY_H

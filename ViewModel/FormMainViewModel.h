@@ -2,7 +2,11 @@
 #define FORMMAINVIEWMODEL_H
 
 #include <QWidget>
-#include <ui_FormMain.h>
+#include <ViewModel/FormOrderViewModel.h>
+
+namespace Ui {
+    class FormMain;
+}
 
 class FormMainViewModel : public QWidget
 {
@@ -16,7 +20,8 @@ private slots:
     void closeOrder();
 
 private:
-    Ui::Form *ui;
+    Ui::FormMain *ui;
+    FormOrderViewModel *_orderView;
 };
 
 #endif // FORMMAINVIEWMODEL_H
