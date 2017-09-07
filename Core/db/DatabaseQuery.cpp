@@ -13,12 +13,16 @@ void DatabaseQuery::execute(QString query)
 {
     LOG_TRACE << query;
 
-    if (!_stmt)
+    if (_stmt)
     {
         clear();
     }
 
-    if (!Context::instance().defaultConnection()->exec(query, _stmt))
+    if (!Context::instance().defaultConnection()->exec(query, &_stmt))
+    {
+        throw std::runtime_error("Не удалось выполнить запрос!");
+    }
+    if (!next())
     {
         throw std::runtime_error("Не удалось выполнить запрос!");
     }
@@ -44,7 +48,8 @@ bool DatabaseQuery::first()
 bool DatabaseQuery::next()
 {
     int res = sqlite3_step(_stmt);
-    return res == SQLITE_ROW;
+    LOG_DEBUG << res;
+    return res == SQLITE_ROW || res == SQLITE_DONE;
 }
 
 QVariant DatabaseQuery::value(int column)
@@ -126,6 +131,7 @@ void DatabaseQuery::clear()
     try
     {
         sqlite3_finalize(_stmt);
+        _stmt = 0;
     }
     catch (...)
     {

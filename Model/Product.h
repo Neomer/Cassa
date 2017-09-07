@@ -1,9 +1,9 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 
-#include <Core/IStorageModel.h>
+#include <Core/IStorageByIdModel.h>
 
-class Product : public IStorageModel
+class Product : public IStorageByIdModel
 {
     Q_OBJECT
 
@@ -44,7 +44,6 @@ public slots:
     }
     void setQuantity(double quantity)
     {
-        qWarning("Floating point comparison needs context sanity check");
         if (qFuzzyCompare(m_quantity, quantity))
             return;
 
@@ -54,7 +53,6 @@ public slots:
 
     void setCost(double cost)
     {
-        qWarning("Floating point comparison needs context sanity check");
         if (qFuzzyCompare(m_cost, cost))
             return;
 
@@ -66,6 +64,10 @@ signals:
     void nameChanged(QString name);
     void quantityChanged(double quantity);
     void costChanged(double cost);
+
+    // IStorageModel interface
+public:
+    QString tableName() { return "Product"; }
 };
 
 #endif // PRODUCT_H

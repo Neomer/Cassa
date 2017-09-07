@@ -3,6 +3,8 @@
 #include <Core/Context.h>
 #include <Core/logs/Logger.h>
 
+#include <ViewModel/FormMainViewModel.h>
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -15,6 +17,9 @@ int main(int argc, char *argv[])
     {
         LOG_ERROR << "Ошибка при загрузке файла конфигурации!" << ex.what();
     }
+
+    FormMainViewModel formMain;
+    formMain.show();
 
     return a.exec();
 }

@@ -17,10 +17,16 @@ bool DatabaseConnection::open(QString filename)
 {
     LOG_TRACE << filename;
 
+    LOG_DEBUG << "Открываем файл БД" << Context::instance().databaseDirectory().absoluteFilePath(filename);
     if (sqlite3_open(Context::instance().databaseDirectory().absoluteFilePath(filename).toUtf8().constData(),
                      &this->_conn) != SQLITE_OK)
     {
         LOG_ERROR << "Ошибка при открытии базы данных!";
+        return false;
+    }
+    if (sqlite3_initialize() != SQLITE_OK)
+    {
+        LOG_ERROR << "Ошибка при инициализации базы данных!";
         return false;
     }
     return true;
@@ -34,17 +40,19 @@ void DatabaseConnection::close()
     }
 }
 
-bool DatabaseConnection::exec(QString query, sqlite3_stmt *stmt)
+bool DatabaseConnection::exec(QString query, sqlite3_stmt **stmt)
 {
     LOG_TRACE << query;
 
-    if (sqlite3_prepare(this->_conn,
-                        query.toUtf8().constData(),
-                        query.length(),
-                        &stmt,
-                        NULL) != SQLITE_OK)
+    int r = sqlite3_prepare_v2(this->_conn,
+                            query.toUtf8().constData(),
+                            query.length(),
+                            stmt,
+                            NULL);
+    LOG_TRACE << r << sqlite3_errstr(r);
+    if (r != SQLITE_OK)
     {
-        LOG_ERROR << "Ошибка при выполнении запроса!";
+        LOG_ERROR << "Ошибка при выполнении запроса!" << sqlite3_errstr(r);
         return false;
     }
     return true;

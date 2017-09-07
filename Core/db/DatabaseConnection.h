@@ -13,7 +13,7 @@ public:
 
     bool open(QString filename);
     void close();
-    bool exec(QString query, sqlite3_stmt *stmt);
+    bool exec(QString query, sqlite3_stmt **stmt);
 
 private:
     sqlite3 *_conn;

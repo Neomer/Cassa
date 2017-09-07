@@ -30,7 +30,13 @@ SOURCES += \
     Core/db/DatabaseQuery.cpp \
     Core/logs/Logger.cpp \
     Model/Product.cpp \
-    Core/IStorageModel.cpp
+    Model/Order.cpp \
+    Core/IStorageByIdModel.cpp \
+    Core/IStorageModel.cpp \
+    Model/OrderDetails.cpp \
+    ViewModel/FormMainViewModel.cpp \
+    Core/GuiUtils.cpp \
+    ViewModel/FormOrderViewModel.cpp
 
 HEADERS += \
     Core/Context.h \
@@ -38,17 +44,29 @@ HEADERS += \
     Core/db/DatabaseQuery.h \
     Core/logs/Logger.h \
     Model/Product.h \
-    Core/IStorageModel.h
+    Model/Order.h \
+    Core/IStorageByIdModel.h \
+    Core/IStorageModel.h \
+    Model/OrderDetails.h \
+    ViewModel/FormMainViewModel.h \
+    Core/GuiUtils.h \
+    ViewModel/FormOrderViewModel.h
 
 FORMS += \
+    View/FormMain.ui \
+    View/FormOrder.ui
 
 INCLUDEPATH += $$PWD
 
-defined(win32) {
+if(win32*):CONFIG(debug, debug|release) {
     INCLUDEPATH += "C:/libs/sqlite-amalgamation-3200100"
     LIBS += -L "C:/libs/sqlite-dll-win32-x86-3200100" -l sqlite3
 }
-if(linux-g++*):CONFIG(debug, debug|release)  {
+if(linux-g++*):CONFIG(debug, debug|release) {
     INCLUDEPATH += /usr/include
     LIBS += -L/usr/lib -L/usr/lib/nvidia-375 -lsqlite3 -lGL
 }
+
+UI_DIR += tmp
+OBJECTS_DIR += tmp
+MOC_DIR += tmp
