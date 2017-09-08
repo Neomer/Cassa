@@ -20,6 +20,7 @@ private slots:
     void createOrder();
     void closeOrder();
 	void editProducts();
+	void editStock();
 
 private:
     Ui::FormMain *ui;

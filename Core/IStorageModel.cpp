@@ -49,7 +49,7 @@ bool IStorageModel::select(Condition cond)
 
     try
     {
-        execute(" select * from " + tableName() +
+        DatabaseQuery::execute(" select * from " + tableName() +
                 " where " + filters);
 
         parseStatement();
@@ -62,13 +62,19 @@ bool IStorageModel::select(Condition cond)
 	}
 }
 
-bool IStorageModel::select()
+bool IStorageModel::select(QStringList order)
 {
 	LOG_TRACE;
 	
+	QString sOrd;
+	if (order.count() > 0)
+	{
+		sOrd = " order by " + order.join(',');
+	}
+	
 	try
     {
-        execute("select * from " + tableName() + ";");
+        DatabaseQuery::execute("select * from " + tableName() + sOrd + ";");
 
         parseStatement();
         return true;
@@ -111,7 +117,7 @@ bool IStorageModel::update(Condition cond)
 
     try
     {
-        execute(" update " + tableName() +
+        DatabaseQuery::execute(" update " + tableName() +
                 " set " + values +
                 " where " + filters);
 
@@ -150,7 +156,7 @@ bool IStorageModel::insert()
 
     try
     {
-        execute(" insert into " + tableName() +
+        DatabaseQuery::execute(" insert into " + tableName() +
                 " (" + fields + ") "
                 " values (" + values + ");");
     }
@@ -162,7 +168,7 @@ bool IStorageModel::insert()
 
     try
     {
-        execute("select last_insert_rowid() from " + tableName() + ";");
+        DatabaseQuery::execute("select last_insert_rowid() from " + tableName() + ";");
     }
     catch (std::exception ex)
     {
@@ -173,6 +179,51 @@ bool IStorageModel::insert()
     Condition c;
     c["ROWID"] = value(0);
 	return select(c);
+}
+
+bool IStorageModel::remove(Condition cond)
+{
+	LOG_TRACE << cond.count();
+    QString filters;
+    QStringList keys = cond.keys();
+
+    foreach (QString k, keys)
+    {
+        filters += QString("`%1`=%2 and ").arg(
+                    k,
+                    formatValue(cond[k]));
+    }
+    filters = filters.left(filters.length() - 4);
+
+    try
+    {
+        DatabaseQuery::execute(" delete from " + tableName() +
+                " where " + filters);
+
+        return true;
+    }
+    catch (std::exception ex)
+    {
+        LOG_ERROR << ex.what();
+        return false;
+	}
+}
+
+bool IStorageModel::remove()
+{
+	LOG_TRACE;
+	
+	try
+    {
+        DatabaseQuery::execute("delete from " + tableName() + ";");
+
+        return true;
+    }
+    catch (std::exception ex)
+    {
+        LOG_ERROR << ex.what();
+        return false;
+	}
 }
 
 bool IStorageModel::at(int index)
@@ -205,6 +256,26 @@ bool IStorageModel::first()
 	return ret;
 }
 
+bool IStorageModel::execute(QString query, bool parseResult)
+{
+	LOG_TRACE << query;
+	
+	try
+    {
+        DatabaseQuery::execute(query);
+		if (parseResult)
+		{
+			parseStatement();
+		}
+        return true;
+    }
+    catch (std::exception ex)
+    {
+        LOG_ERROR << ex.what();
+        return false;
+	}
+}
+
 void IStorageModel::parseStatement()
 {
     LOG_TRACE;
@@ -233,7 +304,10 @@ QString IStorageModel::formatValue(QVariant value)
 {
     switch (value.type())
     {
-        case QVariant::String: case QVariant::Bool:
+        case QVariant::String: 
+			return QString("'%1'").arg(value.toString()).toUtf8().constData();
+		
+		case QVariant::Bool:
             return "'" + value.toString() + "'";
 
         case QVariant::DateTime:

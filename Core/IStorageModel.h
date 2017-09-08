@@ -17,13 +17,17 @@ public:
     virtual QString tableName() = 0;
 
     bool select(Condition cond);
-	bool select();
+	bool select(QStringList order = QStringList());
     bool update(Condition cond);
     bool insert();
+	bool remove(Condition cond);
+	bool remove();
 
 	bool at(int index);
 	bool next();
 	bool first();
+	
+	bool execute(QString query, bool parseResult = true);
 	
 protected:
     void parseStatement();

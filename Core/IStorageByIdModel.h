@@ -13,8 +13,10 @@ public:
     IStorageByIdModel();
 
     bool select(int id);
-	bool select();
+	bool select(QStringList order = QStringList());
     bool update();
+	bool remove(int id);
+	bool remove();
 	
 
 

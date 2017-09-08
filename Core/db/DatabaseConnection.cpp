@@ -45,8 +45,8 @@ bool DatabaseConnection::exec(QString query, sqlite3_stmt **stmt)
     LOG_TRACE << query;
 
     int r = sqlite3_prepare_v2(this->_conn,
-                            query.toUtf8().constData(),
-                            query.length(),
+                            query.toStdString().data(),
+                            query.toStdString().length(),
                             stmt,
                             NULL);
     LOG_TRACE << r << sqlite3_errstr(r);

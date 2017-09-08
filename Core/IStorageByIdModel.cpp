@@ -27,9 +27,9 @@ bool IStorageByIdModel::select(int id)
 	}
 }
 
-bool IStorageByIdModel::select()
+bool IStorageByIdModel::select(QStringList order)
 {
-	return IStorageModel::select();
+	return IStorageModel::select(order);
 }
 
 bool IStorageByIdModel::update()
@@ -62,6 +62,42 @@ bool IStorageByIdModel::update()
         LOG_ERROR << ex.what();
         return false;
 	}
+}
+
+bool IStorageByIdModel::remove(int id)
+{
+	LOG_TRACE << id;
+
+    try
+    {
+        execute(" delete from " + tableName() +
+                " where id=" + QString::number(id));
+        return true;
+    }
+    catch (std::exception ex)
+    {
+        LOG_ERROR << ex.what();
+        return false;
+	}
+
+}
+
+bool IStorageByIdModel::remove()
+{
+	LOG_TRACE;
+
+    try
+    {
+        execute(" delete from " + tableName() +
+                " where id=" + QString::number(getId()));
+        return true;
+    }
+    catch (std::exception ex)
+    {
+        LOG_ERROR << ex.what();
+        return false;
+	}
+
 }
 
 

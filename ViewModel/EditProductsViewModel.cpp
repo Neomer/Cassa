@@ -43,8 +43,8 @@ void EditProductsViewModel::rowSelected(const QModelIndex &index)
 		if (p->at(index.row()))
 		{
 			ui->txtName->setText(p->getName());
-			ui->txtPrice->setText(QString::number(p->getCost(), 'f', 2));
-			ui->txtQuantity->setText(QString::number(p->getQuantity(), 'f', 2));
+			//ui->txtPrice->setText(QString::number(p->getCost(), 'f', 2));
+			//ui->txtQuantity->setText(QString::number(p->getQuantity(), 'f', 2));
 		}
 		else
 		{
@@ -59,8 +59,6 @@ void EditProductsViewModel::createProduct()
 	Product p;
 	p.setName(ui->txtName->text());
 	bool ok = true;
-	p.setQuantity(ui->txtQuantity->text().toDouble(&ok));
-	p.setCost(ui->txtPrice->text().toDouble(&ok));
 	
 	if (!ok)
 	{
@@ -80,6 +78,11 @@ void EditProductsViewModel::removeProduct()
 {
 	LOG_TRACE;
 	
+	if (!_products->product()->remove())
+	{
+		GuiUtils::showError("Не удалось удалить продукт!");
+	}
+	update();
 }
 
 void EditProductsViewModel::update()

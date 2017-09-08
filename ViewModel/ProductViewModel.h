@@ -1,11 +1,17 @@
 #ifndef PRODUCTVIEWMODEL_H
 #define PRODUCTVIEWMODEL_H
 
-#include <QAbstractTableModel>
+#include <Core/ITableModel.h>
 #include <Model/Product.h>
 
-class ProductViewModel : public QAbstractTableModel
+class ProductViewModel : public ITableModel
 {
+	enum ProductRoles
+	{
+		enId,
+		enName
+	};
+	
 public:
 	ProductViewModel(QObject *parent = 0);
 	
@@ -20,10 +26,7 @@ private:
 	// QAbstractItemModel interface
 public:
 	int rowCount(const QModelIndex &parent) const;
-	int columnCount(const QModelIndex &parent) const;
 	QVariant data(const QModelIndex &index, int role) const;
-	QHash<int, QByteArray> roleNames() const;
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 };
 
 #endif // PRODUCTVIEWMODEL_H
