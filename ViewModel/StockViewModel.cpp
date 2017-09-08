@@ -6,7 +6,14 @@ StockViewModel::StockViewModel(QObject *parent) :
 {
 	LOG_TRACE;
 	_roles << "ИД" << "Продукт" << "Количество" << "Цена";
-	s = new Stock();
+    s = new Stock();
+}
+
+void StockViewModel::load()
+{
+    beginResetModel();
+    s->select();
+    endResetModel();
 }
 
 int StockViewModel::rowCount(const QModelIndex &parent) const

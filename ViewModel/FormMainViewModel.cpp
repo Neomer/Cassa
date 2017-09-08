@@ -21,6 +21,7 @@ FormMainViewModel::FormMainViewModel(QWidget *parent) :
 
     _orderView = new FormOrderViewModel();
 	_editProductsView = new EditProductsViewModel();
+    _editStock = new FormStockViewModel();
 }
 
 void FormMainViewModel::createOrder()
@@ -61,4 +62,6 @@ void FormMainViewModel::editProducts()
 void FormMainViewModel::editStock()
 {
 	LOG_TRACE;
+
+    _editStock->show();
 }

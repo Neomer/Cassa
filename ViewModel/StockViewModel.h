@@ -11,6 +11,8 @@ class StockViewModel : public ITableModel
 public:
 	StockViewModel(QObject *parent = 0);
 	
+    void load();
+
 // QAbstractItemModel interface
 public:
 	int rowCount(const QModelIndex &parent) const;

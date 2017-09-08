@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <ViewModel/FormOrderViewModel.h>
 #include <ViewModel/EditProductsViewModel.h>
+#include <ViewModel/FormStockViewModel.h>
 
 namespace Ui {
     class FormMain;
@@ -26,6 +27,7 @@ private:
     Ui::FormMain *ui;
     FormOrderViewModel *_orderView;
 	EditProductsViewModel * _editProductsView;
+    FormStockViewModel *_editStock;
 };
 
 #endif // FORMMAINVIEWMODEL_H
