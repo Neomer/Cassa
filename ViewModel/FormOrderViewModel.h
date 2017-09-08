@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <ViewModel/orderitemviewmodel.h>
+#include <ViewModel/CreatePositionViewModel.h>
 
 namespace Ui {
     class FormOrder;
@@ -18,9 +19,14 @@ public:
     void loadOrder(int orderId);
     void loadOrder(Order order);
 
+private slots:
+	void createPosition();
+	void removePosition();
+	
 private:
     Ui::FormOrder *ui;
     OrderItemViewModel *_orderItems;
+	CreatePositionViewModel *_createPosition;
 };
 
 #endif // FORMORDERVIEWMODEL_H

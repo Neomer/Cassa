@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <ViewModel/FormOrderViewModel.h>
+#include <ViewModel/EditProductsViewModel.h>
 
 namespace Ui {
     class FormMain;
@@ -18,10 +19,12 @@ public:
 private slots:
     void createOrder();
     void closeOrder();
+	void editProducts();
 
 private:
     Ui::FormMain *ui;
     FormOrderViewModel *_orderView;
+	EditProductsViewModel * _editProductsView;
 };
 
 #endif // FORMMAINVIEWMODEL_H

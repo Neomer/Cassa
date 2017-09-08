@@ -11,11 +11,15 @@ int main(int argc, char *argv[])
 
     try
     {
-        Context::instance().load(QDir(a.applicationDirPath()).absoluteFilePath("Cassa.ini"));
+        if (!Context::instance().load(QDir(a.applicationDirPath()).absoluteFilePath("Cassa.ini")))
+		{
+			return -1;
+		}
     }
     catch (std::exception ex)
     {
         LOG_ERROR << "Ошибка при загрузке файла конфигурации!" << ex.what();
+		return -1;
     }
 
     FormMainViewModel formMain;

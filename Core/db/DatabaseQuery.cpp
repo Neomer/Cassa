@@ -26,6 +26,7 @@ void DatabaseQuery::execute(QString query)
     {
         throw std::runtime_error("Не удалось выполнить запрос!");
     }
+	_eof = false;
     bool hasRows = false;
     if (!next(&hasRows))
     {
@@ -37,8 +38,11 @@ void DatabaseQuery::execute(QString query)
         _rows = 1;
         while (!eof())
         {
-            next();
-            _rows++;
+			next();
+            if (!eof())
+            {
+				_rows++;
+			}
         }
         first();
     }
@@ -103,7 +107,7 @@ bool DatabaseQuery::at(int index)
         start = 0;
         first();
     }
-    for (int i = start; i < index - start; i++)
+    for (int i = 0; i < index - start; i++)
     {
         next();
     }

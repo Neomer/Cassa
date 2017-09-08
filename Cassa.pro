@@ -37,7 +37,10 @@ SOURCES += \
     ViewModel/FormMainViewModel.cpp \
     Core/GuiUtils.cpp \
     ViewModel/FormOrderViewModel.cpp \
-    ViewModel/orderitemviewmodel.cpp
+    ViewModel/orderitemviewmodel.cpp \
+    ViewModel/ProductViewModel.cpp \
+    ViewModel/CreatePositionViewModel.cpp \
+    ViewModel/EditProductsViewModel.cpp
 
 HEADERS += \
     Core/Context.h \
@@ -52,11 +55,16 @@ HEADERS += \
     ViewModel/FormMainViewModel.h \
     Core/GuiUtils.h \
     ViewModel/FormOrderViewModel.h \
-    ViewModel/orderitemviewmodel.h
+    ViewModel/orderitemviewmodel.h \
+    ViewModel/ProductViewModel.h \
+    ViewModel/CreatePositionViewModel.h \
+    ViewModel/EditProductsViewModel.h
 
 FORMS += \
     View/FormMain.ui \
-    View/FormOrder.ui
+    View/FormOrder.ui \
+    View/FormOrderPosition.ui \
+    View/FormEditProducts.ui
 
 INCLUDEPATH += $$PWD
 

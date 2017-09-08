@@ -13,7 +13,9 @@ public:
     IStorageByIdModel();
 
     bool select(int id);
+	bool select();
     bool update();
+	
 
 
     int getId() const

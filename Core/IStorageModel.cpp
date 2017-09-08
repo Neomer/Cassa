@@ -59,7 +59,25 @@ bool IStorageModel::select(Condition cond)
     {
         LOG_ERROR << ex.what();
         return false;
+	}
+}
+
+bool IStorageModel::select()
+{
+	LOG_TRACE;
+	
+	try
+    {
+        execute("select * from " + tableName() + ";");
+
+        parseStatement();
+        return true;
     }
+    catch (std::exception ex)
+    {
+        LOG_ERROR << ex.what();
+        return false;
+	}
 }
 
 bool IStorageModel::update(Condition cond)
@@ -154,7 +172,37 @@ bool IStorageModel::insert()
 
     Condition c;
     c["ROWID"] = value(0);
-    return select(c);
+	return select(c);
+}
+
+bool IStorageModel::at(int index)
+{
+	bool ret = DatabaseQuery::at(index);
+	if (ret)
+	{
+		parseStatement();
+	}
+	return ret;
+}
+
+bool IStorageModel::next()
+{
+	bool ret = DatabaseQuery::next();
+	if (ret)
+	{
+		parseStatement();
+	}
+	return ret;
+}
+
+bool IStorageModel::first()
+{
+	bool ret = DatabaseQuery::first();
+	if (ret)
+	{
+		parseStatement();
+	}
+	return ret;
 }
 
 void IStorageModel::parseStatement()

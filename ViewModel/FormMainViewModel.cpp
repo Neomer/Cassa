@@ -15,8 +15,11 @@ FormMainViewModel::FormMainViewModel(QWidget *parent) :
 
     connect(ui->cmdAddOrder, SIGNAL(clicked(bool)), this, SLOT(createOrder()));
     connect(ui->cmdCloseOrder, SIGNAL(clicked(bool)), this, SLOT(closeOrder()));
+	connect(ui->cmdProducts, SIGNAL(clicked(bool)), this ,SLOT(editProducts()));
+	
 
     _orderView = new FormOrderViewModel();
+	_editProductsView = new EditProductsViewModel();
 }
 
 void FormMainViewModel::createOrder()
@@ -44,5 +47,12 @@ void FormMainViewModel::createOrder()
 
 void FormMainViewModel::closeOrder()
 {
-    LOG_TRACE;
+	LOG_TRACE;
+}
+
+void FormMainViewModel::editProducts()
+{
+	LOG_TRACE;
+	
+	_editProductsView->show();
 }

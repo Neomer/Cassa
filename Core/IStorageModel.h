@@ -17,9 +17,14 @@ public:
     virtual QString tableName() = 0;
 
     bool select(Condition cond);
+	bool select();
     bool update(Condition cond);
     bool insert();
 
+	bool at(int index);
+	bool next();
+	bool first();
+	
 protected:
     void parseStatement();
     QString formatValue(QVariant value);

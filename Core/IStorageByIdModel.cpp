@@ -24,7 +24,12 @@ bool IStorageByIdModel::select(int id)
     {
         LOG_ERROR << ex.what();
         return false;
-    }
+	}
+}
+
+bool IStorageByIdModel::select()
+{
+	return IStorageModel::select();
 }
 
 bool IStorageByIdModel::update()
@@ -56,6 +61,7 @@ bool IStorageByIdModel::update()
     {
         LOG_ERROR << ex.what();
         return false;
-    }
+	}
 }
+
 
