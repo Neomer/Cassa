@@ -7,16 +7,18 @@ class OrderDetails : public IStorageModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(int order_id READ getOrderId WRITE setOrderId NOTIFY orderIdChanged)
-    Q_PROPERTY(int product_id READ getProductId WRITE getProductId NOTIFY productIdChanged)
-    Q_PROPERTY(double quantity READ getQuantity WRITE setQuantity NOTIFY quantityChanged)
-    Q_PROPERTY(double cost READ getCost WRITE setCost NOTIFY costChanged)
+    Q_PROPERTY(int order_id READ getOrderId WRITE setOrderId NOTIFY orderIdChanged STORED true)
+    Q_PROPERTY(int product_id READ getProductId WRITE setProductId NOTIFY productIdChanged STORED true)
+    Q_PROPERTY(double quantity READ getQuantity WRITE setQuantity NOTIFY quantityChanged STORED true)
+    Q_PROPERTY(double cost READ getCost WRITE setCost NOTIFY costChanged STORED true)
+	Q_PROPERTY(QString product_name READ getProductName WRITE setProductName NOTIFY productNameChanged STORED false)
 
     int m_order_id;
     int m_product_id;
     double m_quantity;
     double m_cost;
-
+	QString m_productName;
+	
 public:
     OrderDetails();
 
@@ -38,6 +40,14 @@ public:
     {
         return m_cost;
     }
+	
+	bool loadWithProductName(int orderId);
+	
+	bool select(int orderId, int productId);
+	bool select(Condition c);
+	
+	bool update();
+	bool update(Condition c);
 
 public slots:
     void setOrderId(int order_id)
@@ -48,7 +58,7 @@ public slots:
         m_order_id = order_id;
         emit orderIdChanged(m_order_id);
     }
-    void getProductId(int product_id)
+    void setProductId(int product_id)
     {
         if (m_product_id == product_id)
             return;
@@ -74,16 +84,31 @@ public slots:
         m_cost = cost;
         emit costChanged(m_cost);
     }
-
+	
+	void setProductName(QString productName)
+	{
+		if (m_productName == productName)
+			return;
+		
+		m_productName = productName;
+		emit productNameChanged(productName);
+	}
+	
 signals:
     void orderIdChanged(int order_id);
     void productIdChanged(int product_id);
     void quantityChanged(double quantity);
     void costChanged(double cost);
 
-    // IStorageModel interface
+	// IStorageModel interface
+	void productNameChanged(QString productName);
+	
 public:
-    QString tableName() { return "OrderDetails"; }
+QString tableName() { return "OrderDetails"; }
+QString getProductName() const
+{
+	return m_productName;
+}
 };
 
 #endif // ORDERDETAILS_H

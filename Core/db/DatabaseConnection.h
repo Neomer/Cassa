@@ -4,12 +4,14 @@
 #include <QObject>
 #include <sqlite3.h>
 
+#define nullptr		0
+
 class DatabaseConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DatabaseConnection(QObject *parent = nullptr);
+    explicit DatabaseConnection(QObject *parent = 0);
 
     bool open(QString filename);
     void close();

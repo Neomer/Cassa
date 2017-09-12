@@ -2,18 +2,18 @@
 #include <Core/logs/Logger.h>
 
 OrderItemViewModel::OrderItemViewModel(QObject *parent) :
-    QAbstractTableModel(parent)
+    ITableModel(parent)
 {
     LOG_TRACE;
     _order = new OrderDetails();
+	_roles << "Продукт" << "Количество" << "Сумма";
+	
 }
 
 void OrderItemViewModel::getOrderItemsByOrderId(int id)
 {
     LOG_TRACE << id;
-    Condition c;
-    c["order_id"] = id;
-    if (!_order->select(c))
+    if (!_order->loadWithProductName(id))
     {
         throw std::runtime_error("Заказ с переданным ID не найден!");
     }
@@ -30,49 +30,28 @@ int OrderItemViewModel::rowCount(const QModelIndex &parent) const
     return _order->count();
 }
 
-int OrderItemViewModel::columnCount(const QModelIndex &parent) const
-{
-    LOG_TRACE;
-
-    Q_UNUSED(parent);
-
-    return _order->columnCount();
-}
 
 QVariant OrderItemViewModel::data(const QModelIndex &index, int role) const
 {
     LOG_TRACE << index.row() << role;
 
-    if (index.isValid())
-    {
-        _order->at(index.row());
-    }
-    if (role == Qt::DisplayRole)
-    {
-        return QString("row %1 col %2").arg(
-                    QString::number(index.row()),
-                    QString::number(index.column()));
-    }
-	return QVariant();
-}
-
-QVariant OrderItemViewModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-	LOG_TRACE;
-	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+	if (role == Qt::DisplayRole)
 	{
-		switch (section)
+		if (index.isValid())
 		{
-			case 0: return "Ид";
-			case 1: return "Наименование";
-			case 2: return "Количество";
-			case 3: return "Цена";
+			_order->at(index.row());
 		}
-	}
-	else
-	{
-		return QAbstractTableModel::headerData(section, orientation, role);
+		
+		switch (index.column())
+		{
+			case 0: return _order->getProductName();
+			case 1: return _order->getQuantity();
+			case 2: return _order->getCost();
+		}
+		
+		return QVariant();
 	}
 	
 	return QVariant();
 }
+

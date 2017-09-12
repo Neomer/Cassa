@@ -12,6 +12,7 @@ FormOrderViewModel::FormOrderViewModel(QWidget *parent) :
 
     _orderItems = new OrderItemViewModel(this);
 	_createPosition = new CreatePositionViewModel();
+	_order = new Order();
 	
 	connect(ui->cmdAddPosition, SIGNAL(clicked(bool)), this, SLOT(createPosition()));
 	connect(ui->cmdRemovePosition, SIGNAL(clicked(bool)), this, SLOT(removePosition()));
@@ -21,30 +22,31 @@ void FormOrderViewModel::loadOrder(int orderId)
 {
     LOG_TRACE << orderId;
 
-    Order o;
-    if (!o.select(orderId))
+    if (!_order->select(orderId))
     {
         throw std::runtime_error("Заказ с указанным ID не найден!");
     }
-    loadOrder(o);
+    loadOrder();
 }
 
-void FormOrderViewModel::loadOrder(Order order)
+void FormOrderViewModel::loadOrder()
 {
-    LOG_TRACE << order.getId();
+    LOG_TRACE << _order->getId();
 
-    _orderItems->getOrderItemsByOrderId(order.getId());
+    _orderItems->getOrderItemsByOrderId(_order->getId());
 
-    ui->lblCreated->setText(order.getCreationTime().toString("yyyy-MM-dd hh:mm:ss"));
-    ui->lblID->setText(QString::number(order.getId()));
+    ui->lblCreated->setText(_order->getCreationTime().toString("yyyy-MM-dd hh:mm:ss"));
+    ui->lblID->setText(QString::number(_order->getId()));
 	ui->tv->setModel(_orderItems);
-	ui->tv->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+	ui->tv->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 }
 
 void FormOrderViewModel::createPosition()
 {
 	LOG_TRACE;
-	_createPosition->show();
+	
+	_createPosition->show(_order->getId());
+	loadOrder();
 }
 
 void FormOrderViewModel::removePosition()

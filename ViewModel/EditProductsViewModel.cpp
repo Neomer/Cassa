@@ -43,8 +43,7 @@ void EditProductsViewModel::rowSelected(const QModelIndex &index)
 		if (p->at(index.row()))
 		{
 			ui->txtName->setText(p->getName());
-			//ui->txtPrice->setText(QString::number(p->getCost(), 'f', 2));
-			//ui->txtQuantity->setText(QString::number(p->getQuantity(), 'f', 2));
+			ui->txtPrice->setText(QString::number(p->getPrice(), 'f', 2));
 		}
 		else
 		{
@@ -58,7 +57,9 @@ void EditProductsViewModel::createProduct()
 	LOG_TRACE;
 	Product p;
 	p.setName(ui->txtName->text());
+
 	bool ok = true;
+	p.setPrice(ui->txtPrice->text().toDouble(&ok));
 	
 	if (!ok)
 	{
@@ -77,7 +78,7 @@ void EditProductsViewModel::createProduct()
 void EditProductsViewModel::removeProduct()
 {
 	LOG_TRACE;
-	
+	_products->product()->at(ui->tableView->currentIndex().row());
 	if (!_products->product()->remove())
 	{
 		GuiUtils::showError("Не удалось удалить продукт!");
@@ -96,6 +97,21 @@ void EditProductsViewModel::update()
 void EditProductsViewModel::editProduct()
 {
 	LOG_TRACE;
-	
+	_products->product()->at(ui->tableView->currentIndex().row());
+	Product p;
+	p.setId(_products->product()->getId());
+	p.setName(ui->txtName->text());
+	bool ok = true;
+	p.setPrice(ui->txtPrice->text().toDouble(&ok));
+	if (!ok)
+	{
+		GuiUtils::showError("Ошибка в формате введенных данных!");
+		return;
+	}
+	if (!p.update())
+	{
+		GuiUtils::showError("Не удалось обновить информацию по товару!");
+	}
+	update();
 }
 

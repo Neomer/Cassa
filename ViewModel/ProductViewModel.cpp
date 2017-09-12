@@ -6,7 +6,7 @@ ProductViewModel::ProductViewModel(QObject *parent) :
 {
 	LOG_TRACE;
 	p = new Product();
-	_roles << "ИД" << "Наименование";
+	_roles << "ИД" << "Наименование" << "Цена";
 }
 
 void ProductViewModel::getAll()
@@ -48,6 +48,7 @@ QVariant ProductViewModel::data(const QModelIndex &index, int role) const
 		{
 			case 0: return p->getId();
 			case 1: return p->getName();
+			case 2: return p->getPrice();
 		}
 		
 		

@@ -9,7 +9,7 @@ class DatabaseQuery : public QObject
     Q_OBJECT
 
 public:
-    explicit DatabaseQuery(QObject *parent = nullptr);
+    explicit DatabaseQuery(QObject *parent = 0);
 
     void execute(QString query);
 

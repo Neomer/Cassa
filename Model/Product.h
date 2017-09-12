@@ -7,17 +7,14 @@ class Product : public IStorageByIdModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(QString index_name READ getIndexName WRITE setIndexName NOTIFY nameIndexChanged)
-    //Q_PROPERTY(double quantity READ getQuantity WRITE setQuantity NOTIFY quantityChanged)
-    //Q_PROPERTY(double cost READ getCost WRITE setCost NOTIFY costChanged)
+    Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged STORED true)
+	Q_PROPERTY(QString index_name READ getIndexName WRITE setIndexName NOTIFY nameIndexChanged STORED true)
+    Q_PROPERTY(double price READ getPrice WRITE setPrice NOTIFY costPrice STORED true)
 
     QString m_name;
-    double m_quantity;
-    double m_cost;
-	
 	QString m_index_name;
-	
+	double m_price;
+
 public:
     Product();
     QString getName() const
@@ -28,16 +25,11 @@ public:
 	{
 		return m_index_name;
 	}
-
-	//    double getQuantity() const
-//    {
-//        return m_quantity;
-//    }
-
-//    double getCost() const
-//    {
-//        return m_cost;
-//    }
+	double getPrice() const
+	{
+		return m_price;
+	}
+	QString tableName() { return "Product"; }
 
 public slots:
     void setName(QString name)
@@ -50,24 +42,7 @@ public slots:
 		
 		setIndexName(name.toUpper());
     }
-//    void setQuantity(double quantity)
-//    {
-//        if (qFuzzyCompare(m_quantity, quantity))
-//            return;
 
-//        m_quantity = quantity;
-//        emit quantityChanged(m_quantity);
-//    }
-
-//    void setCost(double cost)
-//    {
-//        if (qFuzzyCompare(m_cost, cost))
-//            return;
-
-//        m_cost = cost;
-//        emit costChanged(m_cost);
-//    }
-	
 	void setIndexName(QString index_name)
 	{
 		if (m_index_name == index_name)
@@ -77,16 +52,19 @@ public slots:
 		emit nameIndexChanged(index_name);
 	}
 	
+	void setPrice(double price)
+	{
+		if (m_price == price)
+			return;
+		m_price = price;
+		emit costPrice(price);
+	}
+
 signals:
     void nameChanged(QString name);
-    void quantityChanged(double quantity);
-    void costChanged(double cost);
-
-	// IStorageModel interface
 	void nameIndexChanged(QString index_name);
-	
-public:
-QString tableName() { return "Product"; }
+	void costPrice(double price);
+
 };
 
 #endif // PRODUCT_H

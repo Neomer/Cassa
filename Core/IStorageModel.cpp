@@ -96,13 +96,23 @@ bool IStorageModel::update(Condition cond)
     for (int p = mo->propertyOffset(); p < mo->propertyCount() - 1; ++p)
     {
         QMetaProperty prop = mo->property(p);
-        values += QString("`%1`=%2, ").arg(
-                    prop.name(),
-                    formatValue(prop.read(this)));
-    }
-    values += QString("`%1`=%2").arg(
-                mo->property(mo->propertyCount() - 1).name(),
-                formatValue(mo->property(mo->propertyCount() - 1).read(this)));
+		if (prop.isStored(this))
+		{
+			values += QString("`%1`=%2, ").arg(
+						prop.name(),
+						formatValue(prop.read(this)));
+		}
+	}
+	if (mo->property(mo->propertyCount() - 1).isStored(this))
+	{
+		values += QString("`%1`=%2").arg(
+					mo->property(mo->propertyCount() - 1).name(),
+					formatValue(mo->property(mo->propertyCount() - 1).read(this)));
+	}
+	else
+	{
+		values = values.left(values.length() - 2);
+	}
 
     QString filters;
     QStringList keys = cond.keys();
@@ -138,21 +148,18 @@ bool IStorageModel::insert()
     QString fields;
     QString values;
     const QMetaObject *mo = this->metaObject();
-    for (int p = mo->propertyOffset(); p < mo->propertyCount() - 1; ++p)
+    for (int p = mo->propertyOffset(); p < mo->propertyCount(); ++p)
     {
         QMetaProperty prop = mo->property(p);
-        if (strcmp(prop.name(), "id"))
+		LOG_TRACE << prop.name() << prop.isStored(this);
+        if (strcmp(prop.name(), "id") && prop.isStored(this))
         {
             fields += "`" + QString(prop.name()) + "`,";
             values += formatValue(prop.read(this)) + ",";
         }
     }
-    QMetaProperty prop = mo->property(mo->propertyCount() - 1);
-    if (strcmp(prop.name(), "id"))
-    {
-        fields += "`" + QString(prop.name()) + "`";
-        values += formatValue(prop.read(this));
-    }
+	fields = fields.left(fields.count() - 1);
+	values = values.left(values.count() - 1);
 
     try
     {

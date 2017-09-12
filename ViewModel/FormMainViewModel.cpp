@@ -16,7 +16,7 @@ FormMainViewModel::FormMainViewModel(QWidget *parent) :
     connect(ui->cmdAddOrder, SIGNAL(clicked(bool)), this, SLOT(createOrder()));
     connect(ui->cmdCloseOrder, SIGNAL(clicked(bool)), this, SLOT(closeOrder()));
 	connect(ui->cmdProducts, SIGNAL(clicked(bool)), this ,SLOT(editProducts()));
-	connect(ui->cmdStock, SIGNAL(clicked(bool)), this, SLOT(editStock()));
+	//connect(ui->cmdStock, SIGNAL(clicked(bool)), this, SLOT(editStock()));
 	
 
     _orderView = new FormOrderViewModel();

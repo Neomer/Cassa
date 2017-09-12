@@ -1,11 +1,11 @@
 #ifndef ORDERITEMVIEWMODEL_H
 #define ORDERITEMVIEWMODEL_H
 
-#include <QAbstractTableModel>
+#include <Core/ITableModel.h>
 #include <Model/OrderDetails.h>
 #include <Model/Order.h>
 
-class OrderItemViewModel : public QAbstractTableModel
+class OrderItemViewModel : public ITableModel
 {
     Q_OBJECT
 
@@ -18,12 +18,9 @@ public:
 private:
     OrderDetails *_order;
 
-    // QAbstractItemModel interface
 public:
     int rowCount(const QModelIndex &parent) const;
-    int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 };
 
 #endif // ORDERITEMVIEWMODEL_H

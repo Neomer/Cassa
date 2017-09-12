@@ -14,10 +14,10 @@ class FormOrderViewModel : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormOrderViewModel(QWidget *parent = nullptr);
+    explicit FormOrderViewModel(QWidget *parent = 0);
 
     void loadOrder(int orderId);
-    void loadOrder(Order order);
+    void loadOrder();
 
 private slots:
 	void createPosition();
@@ -27,6 +27,7 @@ private:
     Ui::FormOrder *ui;
     OrderItemViewModel *_orderItems;
 	CreatePositionViewModel *_createPosition;
+	Order *_order;
 };
 
 #endif // FORMORDERVIEWMODEL_H

@@ -5,11 +5,14 @@
 #include <QDebug>
 #include <QDateTime>
 
+#define nullptr		0
+
+
 class Logger : public QObject
 {
     Q_OBJECT
 public:
-    explicit Logger(QObject *parent = nullptr);
+    explicit Logger(QObject *parent = 0);
 
 signals:
 

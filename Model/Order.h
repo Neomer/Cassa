@@ -10,10 +10,10 @@ class Order : public IStorageByIdModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QDateTime creation_time READ getCreationTime WRITE setCreationTime NOTIFY creationTimeChanged)
-    Q_PROPERTY(bool is_payed READ getIsPayed WRITE setIsPayed NOTIFY isPayedChanged)
-    Q_PROPERTY(bool is_credited READ getIsCredited WRITE setIsCredited NOTIFY isCreditedChanged)
-    Q_PROPERTY(QString buyer READ getBuyer WRITE setBuyer NOTIFY buyerChanged)
+    Q_PROPERTY(QDateTime creation_time READ getCreationTime WRITE setCreationTime NOTIFY creationTimeChanged STORED true)
+    Q_PROPERTY(bool is_payed READ getIsPayed WRITE setIsPayed NOTIFY isPayedChanged STORED true)
+    Q_PROPERTY(bool is_credited READ getIsCredited WRITE setIsCredited NOTIFY isCreditedChanged STORED true)
+    Q_PROPERTY(QString buyer READ getBuyer WRITE setBuyer NOTIFY buyerChanged STORED true)
 
     QDateTime m_creation_time;
     bool m_is_payed;

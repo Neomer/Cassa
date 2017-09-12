@@ -17,12 +17,16 @@ class CreatePositionViewModel : public QDialog
 public:
 	CreatePositionViewModel(QWidget *parent = 0);
 	
-	void show();
+	void show(int orderId);
+	
+private slots:
+	void createPosition();
 	
 private:
 	Ui::FormOrderPosition *ui;
 	
 	ProductViewModel *_products;
+	int _orderId;
 };
 
 #endif // CREATEPOSITIONVIEWMODEL_H

@@ -7,10 +7,10 @@ class Stock : public IStorageByIdModel
 {
 	Q_OBJECT
 	
-	Q_PROPERTY(int product_id READ getProductId WRITE setProductId NOTIFY productIdChanged)
-	Q_PROPERTY(double quantity READ getQuantity WRITE setQuantity NOTIFY quantityChanged)
-	Q_PROPERTY(double price READ getPrice WRITE setPrice NOTIFY priceChanged)
-	Q_PROPERTY(bool isSold READ getIsSold WRITE setIsSold NOTIFY isSoldChanged)
+	Q_PROPERTY(int product_id READ getProductId WRITE setProductId NOTIFY productIdChanged STORED true)
+	Q_PROPERTY(double quantity READ getQuantity WRITE setQuantity NOTIFY quantityChanged STORED true)
+	Q_PROPERTY(double price READ getPrice WRITE setPrice NOTIFY priceChanged STORED true)
+	Q_PROPERTY(bool isSold READ getIsSold WRITE setIsSold NOTIFY isSoldChanged STORED true)
 	
 	int m_product_id;
 	double m_quantity;
