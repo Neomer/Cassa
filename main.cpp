@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
 
     FormMainViewModel formMain;
     formMain.show();
+	formMain.resetModel();
 
     return a.exec();
 }

@@ -139,6 +139,7 @@ QVariant DatabaseQuery::value(int column)
             return QVariant::fromValue(sqlite3_column_double(_stmt, column));
 
         case SQLITE_TEXT:
+			LOG_TRACE << (const char *)sqlite3_column_text(_stmt, column);
             return QVariant::fromValue(QString::fromUtf8((const char *)sqlite3_column_text(_stmt, column)));
 
         case SQLITE_BLOB:

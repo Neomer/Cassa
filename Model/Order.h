@@ -14,12 +14,18 @@ class Order : public IStorageByIdModel
     Q_PROPERTY(bool is_payed READ getIsPayed WRITE setIsPayed NOTIFY isPayedChanged STORED true)
     Q_PROPERTY(bool is_credited READ getIsCredited WRITE setIsCredited NOTIFY isCreditedChanged STORED true)
     Q_PROPERTY(QString buyer READ getBuyer WRITE setBuyer NOTIFY buyerChanged STORED true)
+	Q_PROPERTY(double summ READ getSumm WRITE getSumm NOTIFY summChanged STORED false)
+	Q_PROPERTY(int payment READ getPaymentType WRITE setPaymentType NOTIFY paymentTypeChanged)
+	Q_PROPERTY(QString comment READ getComment WRITE setComment NOTIFY commentChanged)
 
     QDateTime m_creation_time;
     bool m_is_payed;
     bool m_is_credited;
     QString m_buyer;
-
+	double m_summ;
+	int m_payment;
+	QString m_comment;
+	
 public:
     Order();
     QDateTime getCreationTime() const
@@ -42,7 +48,26 @@ public:
     }
 
     OrderDetails getOrderDetails();
-
+	
+	QString tableName() { return "[Order]"; }
+	double getSumm() const
+	{
+		return m_summ;
+	}
+	
+	bool selectOrderWithSumm(int orderId);
+	bool selectOrdersWithSumm();
+	
+	int getPaymentType() const
+	{
+		return m_payment;
+	}
+	
+	QString getComment() const
+	{
+		return m_comment;
+	}
+	
 public slots:
     void setCreationTime(QDateTime creation_time)
     {
@@ -78,16 +103,42 @@ public slots:
         m_buyer = buyer;
         emit buyerChanged(m_buyer);
     }
-
+	
+	void getSumm(double summ)
+	{
+		if (m_summ == summ)
+			return;
+		
+		m_summ = summ;
+		emit summChanged(summ);
+	}
+	
+	void setPaymentType(int payment)
+	{
+		if (m_payment == payment)
+			return;
+		
+		m_payment = payment;
+		emit paymentTypeChanged(payment);
+	}
+	
+	void setComment(QString comment)
+	{
+		if (m_comment == comment)
+			return;
+		
+		m_comment = comment;
+		emit commentChanged(comment);
+	}
+	
 signals:
     void creationTimeChanged(QDateTime creation_time);
     void isPayedChanged(bool is_payed);
     void isCreditedChanged(bool is_credited);
     void buyerChanged(QString buyer);
-
-    // IStorageModel interface
-public:
-    QString tableName() { return "[Order]"; }
+	void summChanged(double summ);
+	void paymentTypeChanged(int payment);
+	void commentChanged(QString comment);
 };
 
 #endif // ORDER_H

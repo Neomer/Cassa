@@ -17,7 +17,7 @@ class CreatePositionViewModel : public QDialog
 public:
 	CreatePositionViewModel(QWidget *parent = 0);
 	
-	void show(int orderId);
+	DialogCode show(int orderId);
 	
 private slots:
 	void createPosition();

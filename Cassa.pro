@@ -44,7 +44,12 @@ SOURCES += \
     Model/Stock.cpp \
     Core/ITableModel.cpp \
     ViewModel/FormStockViewModel.cpp \
-    ViewModel/StockViewModel.cpp
+    ViewModel/StockViewModel.cpp \
+    ViewModel/OrderListViewModel.cpp \
+    ViewModel/FormCloseOrderViewModel.cpp \
+    Model/DayResult.cpp \
+    ViewModel/DayResultViewModel.cpp \
+    ViewModel/FormResultsViewModel.cpp
 
 HEADERS += \
     Core/Context.h \
@@ -66,14 +71,21 @@ HEADERS += \
     Model/Stock.h \
     Core/ITableModel.h \
     ViewModel/FormStockViewModel.h \
-    ViewModel/StockViewModel.h
+    ViewModel/StockViewModel.h \
+    ViewModel/OrderListViewModel.h \
+    ViewModel/FormCloseOrderViewModel.h \
+    Model/DayResult.h \
+    ViewModel/DayResultViewModel.h \
+    ViewModel/FormResultsViewModel.h
 
 FORMS += \
     View/FormMain.ui \
     View/FormOrder.ui \
     View/FormOrderPosition.ui \
     View/FormEditProducts.ui \
-    View/FormStock.ui
+    View/FormStock.ui \
+    View/FormCloseOrder.ui \
+    View/FromResults.ui
 
 INCLUDEPATH += $$PWD
 

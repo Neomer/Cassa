@@ -18,7 +18,7 @@ CreatePositionViewModel::CreatePositionViewModel(QWidget *parent) :
 	connect(ui->cmdCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
 }
 
-void CreatePositionViewModel::show(int orderId)
+QDialog::DialogCode CreatePositionViewModel::show(int orderId)
 {
 	LOG_TRACE;
 	_orderId = orderId;
@@ -26,12 +26,25 @@ void CreatePositionViewModel::show(int orderId)
 	_products->getAll();
 	ui->tv->setModel(_products);
 	ui->tv->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-	QDialog::exec();
+	return (QDialog::DialogCode) QDialog::exec();
 }
 
 void CreatePositionViewModel::createPosition()
 {
 	LOG_TRACE;
+	
+	bool ok;
+	double quantity = ui->txtQuantity->text().toDouble(&ok);
+	if (!ok)
+	{
+		GuiUtils::showError("Ошибка в формате введенных данных!");
+		return;
+	}
+	if (quantity <= 0)
+	{
+		GuiUtils::showError("Укажите количество!");
+		return;
+	}
 	
 	_products->product()->at(ui->tv->currentIndex().row());
 	
@@ -44,13 +57,7 @@ void CreatePositionViewModel::createPosition()
 	
 	if (od.count() > 0)
 	{
-		bool ok = true;
-		od.setQuantity(od.getQuantity() + ui->txtQuantity->text().toDouble(&ok));
-		if (!ok)
-		{
-			GuiUtils::showError("Ошибка в формате введенных данных!");
-			return;
-		}
+		od.setQuantity(od.getQuantity() + quantity);
 		od.setCost(od.getCost() + ui->txtQuantity->text().toDouble() * _products->product()->getPrice());
 		if (!od.update())
 		{
@@ -61,13 +68,7 @@ void CreatePositionViewModel::createPosition()
 	{
 		od.setOrderId(_orderId);
 		od.setProductId(_products->product()->getId());
-		bool ok = true;
-		od.setQuantity(ui->txtQuantity->text().toDouble(&ok));
-		if (!ok)
-		{
-			GuiUtils::showError("Ошибка в формате введенных данных!");
-			return;
-		}
+		od.setQuantity(quantity);
 		od.setCost(ui->txtQuantity->text().toDouble() * _products->product()->getPrice());
 		if (!od.insert())
 		{

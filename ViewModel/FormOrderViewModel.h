@@ -9,7 +9,7 @@ namespace Ui {
     class FormOrder;
 }
 
-class FormOrderViewModel : public QWidget
+class FormOrderViewModel : public QDialog
 {
     Q_OBJECT
 
@@ -22,6 +22,7 @@ public:
 private slots:
 	void createPosition();
 	void removePosition();
+	void updateName(QString text);
 	
 private:
     Ui::FormOrder *ui;
