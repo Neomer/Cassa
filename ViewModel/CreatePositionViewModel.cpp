@@ -23,6 +23,8 @@ QDialog::DialogCode CreatePositionViewModel::show(int orderId)
 	LOG_TRACE;
 	_orderId = orderId;
 	
+    ui->txtQuantity->setText("0");
+
 	_products->getAll();
 	ui->tv->setModel(_products);
 	ui->tv->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);

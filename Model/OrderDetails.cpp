@@ -54,5 +54,22 @@ bool OrderDetails::update()
 bool OrderDetails::update(Condition c)
 {
 	LOG_TRACE;
-	return IStorageModel::update(c);
+    return IStorageModel::update(c);
+}
+
+bool OrderDetails::remove()
+{
+    LOG_TRACE;
+
+    Condition c;
+    c["order_id"] = getOrderId();
+    c["product_id"] = getProductId();
+
+    return IStorageModel::remove(c);
+}
+
+bool OrderDetails::remove(Condition c)
+{
+    LOG_TRACE;
+    return IStorageModel::remove(c);
 }

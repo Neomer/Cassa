@@ -5,7 +5,7 @@ OrderListViewModel::OrderListViewModel(QObject *parent) :
 	ITableModel(parent)
 {
 	LOG_TRACE;
-	_roles << "ИД" << "Дата" << "Наименование" << "Сумма" << "Состояние" << "Способ оплаты";
+    _roles << "ИД" << "Дата" << "Алкоголик" << "Сумма" << "Состояние" << "Способ оплаты";
 	o = new Order();
 }
 

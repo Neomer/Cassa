@@ -14,6 +14,8 @@ public:
 
     void getOrderItemsByOrderId(int id);
 
+    OrderDetails *items() { return _order; }
+
 
 private:
     OrderDetails *_order;

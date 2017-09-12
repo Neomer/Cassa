@@ -37,7 +37,16 @@ void FormOrderViewModel::loadOrder()
     LOG_TRACE << _order->getId();
 
     _orderItems->getOrderItemsByOrderId(_order->getId());
-	
+    Order o;
+    if (!o.selectOrderWithSumm(_order->getId()))
+    {
+        GuiUtils::showError("Ошибка при запросе к базе данных!");
+    }
+    else
+    {
+        ui->lblSumm->setText(QString::number(o.getSumm(), 'f', 2));
+    }
+
     ui->lblCreated->setText(_order->getCreationTime().toString("yyyy-MM-dd hh:mm:ss"));
     ui->lblID->setText(QString::number(_order->getId()));
 	ui->txtName->setText(_order->getBuyer());
@@ -70,6 +79,12 @@ void FormOrderViewModel::removePosition()
 	{
 		return;
 	}
+    _orderItems->items()->at(ui->tv->currentIndex().row());
+    if (!_orderItems->items()->remove())
+    {
+        GuiUtils::showError("Ошибка при записи в базу данных!");
+    }
+    loadOrder();
 }
 
 void FormOrderViewModel::updateName(QString text)

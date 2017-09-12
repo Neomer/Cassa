@@ -1,8 +1,11 @@
 #include "FormMainViewModel.h"
 #include <ui_FormMain.h>
+#include <QGraphicsScene>
+#include <QImage>
 
 #include <Core/logs/Logger.h>
 #include <Core/GuiUtils.h>
+#include <Core/Context.h>
 #include <Model/Order.h>
 
 FormMainViewModel::FormMainViewModel(QWidget *parent) :
@@ -20,6 +23,13 @@ FormMainViewModel::FormMainViewModel(QWidget *parent) :
 	
 	connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(showDetails(QModelIndex)));
 	connect(ui->tableView, SIGNAL(entered(QModelIndex)), this, SLOT(showDetails(QModelIndex)));
+
+
+    QDir dir(qApp->applicationDirPath());
+    QPixmap pixmap(dir.absoluteFilePath("rocker.jpg"));
+    QGraphicsScene *scene = new QGraphicsScene(this);
+    scene->addPixmap(pixmap);
+    ui->graphicsView->setScene(scene);
 
     _orderView = new FormOrderViewModel();
 	_editProductsView = new EditProductsViewModel();

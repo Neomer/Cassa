@@ -49,6 +49,9 @@ public:
 	bool update();
 	bool update(Condition c);
 
+    bool remove();
+    bool remove(Condition c);
+
 public slots:
     void setOrderId(int order_id)
     {
