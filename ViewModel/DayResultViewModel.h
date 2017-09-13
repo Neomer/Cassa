@@ -10,12 +10,17 @@ class DayResultViewModel : public ITableModel
 	Q_OBJECT
 public:
 	explicit DayResultViewModel(QObject *parent = 0);
-	int rowCount(const QModelIndex &parent) const;
 	QVariant data(const QModelIndex &index, int role) const;
+
+	void setDateFormat(QString value) { _format = value; }
 	
+	void loadByDay();
+	void loadByWeek();
+	void loadByMonth();
 	
 private:
 	DayResult *r;
+	QString _format;
 };
 
 #endif // DAYRESULTVIEWMODEL_H

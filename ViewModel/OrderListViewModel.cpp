@@ -61,7 +61,7 @@ QVariant OrderListViewModel::data(const QModelIndex &index, int role) const
 			case 1: return o->getCreationTime().toString("dd MMM hh:mm");
 			case 2: return o->getBuyer();
 			case 3: return QString::number(o->getSumm(), 'f', 2);
-			case 4: return o->getIsPayed() ? "Оплачен" : o->getIsCredited() ? "В долг" : "";
+			case 4: return o->getIsPayed() ? "Оплачен" : o->getIsCredited() ? "В долг" : "-";
 			case 5:
 			{
 				switch(o->getPaymentType())

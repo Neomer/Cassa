@@ -23,6 +23,8 @@ public:
 	explicit DayResult(QObject *parent = 0);
 	
 	bool selectLastDay();
+	bool selectLastWeek();
+	bool selectLastMonth();
 	
 	QString tableName() { return ""; }
 	QDateTime getCreationTime() const

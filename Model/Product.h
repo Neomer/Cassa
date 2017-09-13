@@ -10,11 +10,15 @@ class Product : public IStorageByIdModel
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged STORED true)
 	Q_PROPERTY(QString index_name READ getIndexName WRITE setIndexName NOTIFY nameIndexChanged STORED true)
     Q_PROPERTY(double price READ getPrice WRITE setPrice NOTIFY costPrice STORED true)
+	Q_PROPERTY(QString unit READ getUnit WRITE setUnit NOTIFY unitChanged)
+	Q_PROPERTY(bool is_weight READ getIsWeight WRITE setIsWeight NOTIFY isWeightChanged)
 
     QString m_name;
 	QString m_index_name;
 	double m_price;
-
+	QString m_unit;
+	bool m_is_weight;
+	 
 public:
     Product();
     QString getName() const
@@ -30,7 +34,17 @@ public:
 		return m_price;
 	}
 	QString tableName() { return "Product"; }
-
+	
+	QString getUnit() const
+	{
+		return m_unit;
+	}
+	
+	bool getIsWeight() const
+	{
+		return m_is_weight;
+	}
+	
 public slots:
     void setName(QString name)
     {
@@ -59,12 +73,32 @@ public slots:
 		m_price = price;
 		emit costPrice(price);
 	}
-
+	
+	void setUnit(QString unit)
+	{
+		if (m_unit == unit)
+			return;
+		
+		m_unit = unit;
+		emit unitChanged(unit);
+	}
+	
+	void setIsWeight(bool is_weight)
+	{
+		if (m_is_weight == is_weight)
+			return;
+		
+		m_is_weight = is_weight;
+		emit isWeightChanged(is_weight);
+	}
+	
 signals:
     void nameChanged(QString name);
 	void nameIndexChanged(QString index_name);
 	void costPrice(double price);
-
+	
+	void unitChanged(QString unit);
+	void isWeightChanged(bool is_weight);
 };
 
 #endif // PRODUCT_H

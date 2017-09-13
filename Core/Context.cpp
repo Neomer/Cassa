@@ -15,17 +15,11 @@ bool Context::load(QString filename)
         return false;
     }
 
-//    if (!file.open())
-//    {
-//        LOG_ERROR << "Невозможно прочитать файл настроек!";
-//        return false;
-//    }
-
-    QSettings set(filename, QSettings::IniFormat);
+    _sets = new QSettings(filename, QSettings::IniFormat);
 
     QString tmp;
-    set.beginGroup("Paths");
-    tmp = set.value("DatabasePath", qApp->applicationDirPath()).toString();
+    //_sets->beginGroup("Cassa");
+    tmp = _sets->value("Paths/DatabasePath", "").toString();
     if (tmp.isEmpty())
     {
         _databasePath.setPath(qApp->applicationDirPath());
@@ -34,6 +28,16 @@ bool Context::load(QString filename)
     {
         _databasePath.setPath(tmp);
     }
+	tmp = _sets->value("Security/Password", "").toString();
+	if (tmp.isEmpty())
+	{
+		_pswHash = QCryptographicHash::hash(QString("Bober1234").toUtf8(), QCryptographicHash::Sha256);
+	}
+	else
+	{
+		_pswHash = QByteArray::fromHex(tmp.toUtf8());
+	}
+	//_sets->endGroup();
 
     _dbconn = new DatabaseConnection();
     if (!_dbconn->open("db.sqlite"))
@@ -41,7 +45,29 @@ bool Context::load(QString filename)
         throw std::runtime_error("Невозможно подключиться к базе данных!");
     }
 
-    return true;
+	return true;
+}
+
+void Context::setDatabaseDirectory(QString value)
+{
+	LOG_TRACE << value;
+	//_sets->beginGroup("Cassa");
+	_sets->setValue("Paths/DatabasePath", value);
+	//_sets->endGroup();
+}
+
+bool Context::checkPassword(QString value)
+{
+	LOG_TRACE << value;
+	return QCryptographicHash::hash(value.toUtf8(), QCryptographicHash::Sha256) == _pswHash;
+}
+
+void Context::setPassword(QString value)
+{
+	LOG_TRACE;
+	//_sets->beginGroup("Cassa");
+	_sets->setValue("Security/Password", QString(QCryptographicHash::hash(value.toUtf8(), QCryptographicHash::Sha256).toHex()));
+	//_sets->endGroup();
 }
 
 Context::Context()

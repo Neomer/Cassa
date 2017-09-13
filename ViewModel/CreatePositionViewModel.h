@@ -21,12 +21,16 @@ public:
 	
 private slots:
 	void createPosition();
+	void indexChanged();
 	
 private:
 	Ui::FormOrderPosition *ui;
 	
 	ProductViewModel *_products;
 	int _orderId;
+	
+protected:
+	void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // CREATEPOSITIONVIEWMODEL_H

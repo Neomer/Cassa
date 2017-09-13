@@ -1,5 +1,7 @@
 #include "CreatePositionViewModel.h"
 #include <ui_FormOrderPosition.h>
+#include <QKeyEvent>
+
 #include <Core/logs/Logger.h>
 #include <Core/GuiUtils.h>
 #include <Model/OrderDetails.h>
@@ -13,6 +15,8 @@ CreatePositionViewModel::CreatePositionViewModel(QWidget *parent) :
 	_products = new ProductViewModel();
 	
 	ui->setupUi(this);
+	
+	connect(ui->tv, SIGNAL(clicked(QModelIndex)), this, SLOT(indexChanged()));
 	
 	connect(ui->cmdSelect, SIGNAL(clicked(bool)), this, SLOT(createPosition()));
 	connect(ui->cmdCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
@@ -35,6 +39,8 @@ void CreatePositionViewModel::createPosition()
 {
 	LOG_TRACE;
 	
+	_products->product()->at(ui->tv->currentIndex().row());
+	
 	bool ok;
 	double quantity = ui->txtQuantity->text().toDouble(&ok);
 	if (!ok)
@@ -42,13 +48,27 @@ void CreatePositionViewModel::createPosition()
 		GuiUtils::showError("Ошибка в формате введенных данных!");
 		return;
 	}
-	if (quantity <= 0)
+	if (_products->product()->getIsWeight())
 	{
-		GuiUtils::showError("Укажите количество!");
-		return;
+		if (quantity <= 0)
+		{
+			GuiUtils::showError("Весовой товар! Укажите количество!");
+			return;
+		}
+	}
+	else
+	{
+		if (quantity == 0)
+		{
+			quantity = 1;
+		}
+		else if (quantity < 0)
+		{
+			GuiUtils::showError("Неверное количество!");
+			return;
+		}
 	}
 	
-	_products->product()->at(ui->tv->currentIndex().row());
 	
 	OrderDetails od;
 	if (!od.select(_orderId, _products->product()->getId()))
@@ -60,7 +80,7 @@ void CreatePositionViewModel::createPosition()
 	if (od.count() > 0)
 	{
 		od.setQuantity(od.getQuantity() + quantity);
-		od.setCost(od.getCost() + ui->txtQuantity->text().toDouble() * _products->product()->getPrice());
+		od.setCost(od.getCost() + quantity * _products->product()->getPrice());
 		if (!od.update())
 		{
 			GuiUtils::showError("Не удалось добавить позицию!");
@@ -71,13 +91,40 @@ void CreatePositionViewModel::createPosition()
 		od.setOrderId(_orderId);
 		od.setProductId(_products->product()->getId());
 		od.setQuantity(quantity);
-		od.setCost(ui->txtQuantity->text().toDouble() * _products->product()->getPrice());
+		od.setCost(quantity * _products->product()->getPrice());
 		if (!od.insert())
 		{
 			GuiUtils::showError("Не удалось добавить позицию!");
 		}
 	}
 	QDialog::accept();
+}
+
+void CreatePositionViewModel::indexChanged()
+{
+	LOG_TRACE;
+	_products->product()->at(ui->tv->currentIndex().row());
+	ui->lblUnit->setText(_products->product()->getUnit());
+}
+
+void CreatePositionViewModel::keyPressEvent(QKeyEvent *event)
+{
+	LOG_TRACE << event->key();
+	
+	switch (event->key())
+	{
+		case Qt::Key_Enter: case Qt::Key_Return:
+			createPosition();
+			break;
+			
+		case Qt::Key_F5:
+			ui->txtQuantity->setFocus();
+			ui->txtQuantity->setSelection(0, ui->txtQuantity->text().length());
+			break;
+			
+		default:
+			QDialog::keyPressEvent(event);
+	}
 }
 
 

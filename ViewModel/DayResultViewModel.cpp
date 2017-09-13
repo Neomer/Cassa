@@ -1,20 +1,14 @@
 #include "DayResultViewModel.h"
 #include <Core/logs/Logger.h>
 
-DayResultViewModel::DayResultViewModel(QObject *parent) : ITableModel(parent)
+DayResultViewModel::DayResultViewModel(QObject *parent) : 
+	ITableModel(parent)
 {
 	LOG_TRACE;
 	
-	_roles << "Дата" << "Тип оплаты" << "Количество" << "Сумма";
-	r = new DayResult();
-}
-
-int DayResultViewModel::rowCount(const QModelIndex &parent) const
-{
-	LOG_TRACE;
-	Q_UNUSED(parent);
-	
-	return r->count();
+	_roles << "Дата" << "Тип оплаты" << "Заказов" << "Сумма";
+	_model = new DayResult();
+	_format = "yyyy-MM-dd";
 }
 
 QVariant DayResultViewModel::data(const QModelIndex &index, int role) const
@@ -35,22 +29,22 @@ QVariant DayResultViewModel::data(const QModelIndex &index, int role) const
 	{
 		if (index.isValid())
 		{
-			r->at(index.row());
+			_model->at(index.row());
 		}
 		
 		switch (index.column())
 		{
-			case 0: return r->getCreationTime().toString("yyyy-MM-dd");
+			case 0: return ((DayResult *)_model)->getCreationTime().toString(_format);
 			case 1: 
 			{
-				switch (r->getPayment())
+				switch (((DayResult *)_model)->getPayment())
 				{
 					case 1: return "Наличными";
 					case 2: return "По карте";
 				}
 			}
-			case 2: return r->getCount();
-			case 3: return QString::number(r->getSumm(), 'f', 2);
+			case 2: return ((DayResult *)_model)->getCount();
+			case 3: return QString::number(((DayResult *)_model)->getSumm(), 'f', 2);
 		}
 		
 		
@@ -58,6 +52,30 @@ QVariant DayResultViewModel::data(const QModelIndex &index, int role) const
 	}
 	
 	return QVariant();
+	
+}
 
+void DayResultViewModel::loadByDay()
+{
+	LOG_TRACE;
+	beginResetModel();
+	((DayResult *)_model)->selectLastDay();
+	endResetModel();
+}
+
+void DayResultViewModel::loadByWeek()
+{
+	LOG_TRACE;
+	beginResetModel();
+	((DayResult *)_model)->selectLastWeek();
+	endResetModel();
+}
+
+void DayResultViewModel::loadByMonth()
+{
+	LOG_TRACE;
+	beginResetModel();
+	((DayResult *)_model)->selectLastMonth();
+	endResetModel();
 }
 

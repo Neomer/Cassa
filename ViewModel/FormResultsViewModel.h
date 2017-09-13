@@ -2,16 +2,31 @@
 #define FORMRESULTSVIEWMODEL_H
 
 #include <QObject>
+#include <QDialog>
 
-class FormResultsViewModel : public QObject
+#include <Core/ITableModel.h>
+
+namespace Ui {
+    class FormResults;
+}
+
+class FormResultsViewModel : public QDialog
 {
 	Q_OBJECT
 public:
-	explicit FormResultsViewModel(QObject *parent = 0);
+	explicit FormResultsViewModel(QWidget *parent = 0);
+	~FormResultsViewModel();
 	
-signals:
+private slots:
+	void showDayResult();
+	void showWeekResult();
+	void showMonthResult();
 	
-public slots:
+private:
+	void update();
+	
+	Ui::FormResults *ui;	
+	ITableModel *_model;
 };
 
 #endif // FORMRESULTSVIEWMODEL_H

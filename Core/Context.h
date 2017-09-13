@@ -2,6 +2,9 @@
 #define CONTEXT_H
 
 #include <QDir>
+#include <QCryptographicHash>
+#include <QSettings>
+
 #include <Core/db/DatabaseConnection.h>
 
 class Context
@@ -16,7 +19,11 @@ public:
     bool load(QString filename);
 
     QDir databaseDirectory() { return _databasePath; }
+	void setDatabaseDirectory(QString value);
     DatabaseConnection *defaultConnection() { return _dbconn; }
+	
+	bool checkPassword(QString value);
+	void setPassword(QString value);
 
 private:
     Context();
@@ -26,6 +33,8 @@ private:
 
     QDir _databasePath;
     DatabaseConnection *_dbconn;
+	QByteArray _pswHash;
+	QSettings *_sets;
 };
 
 

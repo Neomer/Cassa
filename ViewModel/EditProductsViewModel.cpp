@@ -44,6 +44,8 @@ void EditProductsViewModel::rowSelected(const QModelIndex &index)
 		{
 			ui->txtName->setText(p->getName());
 			ui->txtPrice->setText(QString::number(p->getPrice(), 'f', 2));
+			ui->txtUnit->setText(p->getUnit());
+			ui->chkIsWeight->setChecked(p->getIsWeight());
 		}
 		else
 		{
@@ -57,6 +59,8 @@ void EditProductsViewModel::createProduct()
 	LOG_TRACE;
 	Product p;
 	p.setName(ui->txtName->text());
+	p.setUnit(ui->txtUnit->text());
+	p.setIsWeight(ui->chkIsWeight->isChecked());
 
 	bool ok = true;
 	p.setPrice(ui->txtPrice->text().toDouble(&ok));
@@ -101,6 +105,9 @@ void EditProductsViewModel::editProduct()
 	Product p;
 	p.setId(_products->product()->getId());
 	p.setName(ui->txtName->text());
+	p.setUnit(ui->txtUnit->text());
+	p.setIsWeight(ui->chkIsWeight->isChecked());
+
 	bool ok = true;
 	p.setPrice(ui->txtPrice->text().toDouble(&ok));
 	if (!ok)

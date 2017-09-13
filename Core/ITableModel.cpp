@@ -8,6 +8,8 @@ ITableModel::ITableModel(QObject *parent) :
 
 int ITableModel::columnCount(const QModelIndex &parent) const
 {
+	Q_UNUSED(parent);
+	
 	return _roles.count();
 }
 
@@ -28,5 +30,11 @@ QVariant ITableModel::headerData(int section, Qt::Orientation orientation, int r
 	{
 		return QVariant();
 	}
+}
+
+int ITableModel::rowCount(const QModelIndex &parent) const
+{
+	Q_UNUSED(parent);
+	return _model->count();
 }
 

@@ -49,7 +49,10 @@ SOURCES += \
     ViewModel/FormCloseOrderViewModel.cpp \
     Model/DayResult.cpp \
     ViewModel/DayResultViewModel.cpp \
-    ViewModel/FormResultsViewModel.cpp
+    ViewModel/FormResultsViewModel.cpp \
+    ViewModel/FormRequestPasswordViewModel.cpp \
+    ViewModel/FormSettingsViewModel.cpp \
+    View/TableView.cpp
 
 HEADERS += \
     Core/Context.h \
@@ -76,7 +79,10 @@ HEADERS += \
     ViewModel/FormCloseOrderViewModel.h \
     Model/DayResult.h \
     ViewModel/DayResultViewModel.h \
-    ViewModel/FormResultsViewModel.h
+    ViewModel/FormResultsViewModel.h \
+    ViewModel/FormRequestPasswordViewModel.h \
+    ViewModel/FormSettingsViewModel.h \
+    View/TableView.h
 
 FORMS += \
     View/FormMain.ui \
@@ -85,7 +91,9 @@ FORMS += \
     View/FormEditProducts.ui \
     View/FormStock.ui \
     View/FormCloseOrder.ui \
-    View/FromResults.ui
+    View/FormResults.ui \
+    View/FormPasswordRequest.ui \
+    View/FromSettings.ui
 
 INCLUDEPATH += $$PWD
 

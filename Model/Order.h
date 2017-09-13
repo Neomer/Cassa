@@ -68,6 +68,8 @@ public:
 		return m_comment;
 	}
 	
+	bool removeEmptyOrders();
+	
 public slots:
     void setCreationTime(QDateTime creation_time)
     {
