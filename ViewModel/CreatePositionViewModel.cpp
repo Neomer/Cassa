@@ -20,6 +20,8 @@ CreatePositionViewModel::CreatePositionViewModel(QWidget *parent) :
 	
 	connect(ui->cmdSelect, SIGNAL(clicked(bool)), this, SLOT(createPosition()));
 	connect(ui->cmdCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
+	
+	_inputValueView = new FormInputValue(this);
 }
 
 QDialog::DialogCode CreatePositionViewModel::show(int orderId)
@@ -52,8 +54,27 @@ void CreatePositionViewModel::createPosition()
 	{
 		if (quantity <= 0)
 		{
-			GuiUtils::showError("Весовой товар! Укажите количество!");
-			return;
+			_inputValueView->setCaption("Весовой товар! Укажите количество!");
+			if (_inputValueView->exec() == QDialog::Accepted)
+			{
+				bool ok = true;
+				quantity = _inputValueView->value().toDouble(&ok);
+				if (!ok)
+				{
+					GuiUtils::showError("Ошибка в формате введенных данных!");
+					return;
+				}
+				if (quantity <= 0)
+				{
+					GuiUtils::showError("Неверное количество!");
+					return;
+				}
+			}
+			else
+			{
+				GuiUtils::showError("Весовой товар! Укажите количество!");
+				return;
+			}
 		}
 	}
 	else

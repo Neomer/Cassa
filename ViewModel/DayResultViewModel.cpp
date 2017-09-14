@@ -19,10 +19,10 @@ QVariant DayResultViewModel::data(const QModelIndex &index, int role) const
 	{
 		switch (index.column())
 		{
-			case 0: return Qt::AlignRight;
-			case 1: return Qt::AlignCenter;
-			case 2: return Qt::AlignRight;
-			case 3: return Qt::AlignRight;
+			case 0: return (int)(Qt::AlignRight | Qt::AlignVCenter);
+			case 1: return (int)(Qt::AlignCenter | Qt::AlignVCenter);
+			case 2: return (int)(Qt::AlignRight | Qt::AlignVCenter);
+			case 3: return (int)(Qt::AlignRight | Qt::AlignVCenter);
 		}
 	}
 	else if (role == Qt::DisplayRole)

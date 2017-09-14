@@ -1,7 +1,9 @@
+#include <QKeyEvent>
 #include "FormOrderViewModel.h"
 #include <ui_FormOrder.h>
 #include <Core/logs/Logger.h>
 #include <Core/GuiUtils.h>
+#include <QCompleter>
 
 FormOrderViewModel::FormOrderViewModel(QWidget *parent) :
     QDialog(parent),
@@ -13,12 +15,27 @@ FormOrderViewModel::FormOrderViewModel(QWidget *parent) :
 
     _orderItems = new OrderItemViewModel(this);
 	_createPosition = new CreatePositionViewModel();
+	_orderNames = new OrderNameListViewModel();
 	_order = new Order();
 	
 	connect(ui->cmdAddPosition, SIGNAL(clicked(bool)), this, SLOT(createPosition()));
 	connect(ui->cmdRemovePosition, SIGNAL(clicked(bool)), this, SLOT(removePosition()));
 	connect(ui->txtName, SIGNAL(textChanged(QString)), this, SLOT(updateName(QString)));
 	connect(ui->cmdCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
+	
+	QCompleter *comp = new QCompleter(_orderNames);
+	comp->setCaseSensitivity(Qt::CaseInsensitive);
+	comp->setCompletionMode(QCompleter::PopupCompletion);
+	comp->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+	ui->txtName->setCompleter(comp);
+}
+
+FormOrderViewModel::~FormOrderViewModel()
+{
+	delete _order;
+	delete _orderNames;
+	delete _createPosition;
+	delete _orderItems;
 }
 
 void FormOrderViewModel::loadOrder(int orderId)
@@ -102,4 +119,29 @@ void FormOrderViewModel::updateName(QString text)
 			GuiUtils::showError("Ошибка при записи в базу данных!");
 		}
 	}
+}
+
+
+void FormOrderViewModel::keyPressEvent(QKeyEvent *event)
+{
+	LOG_TRACE;
+	switch (event->key()) 
+	{
+		case Qt::Key_F5:
+			createPosition();
+			break;
+		
+		case Qt::Key_F8:
+			removePosition();
+			break;
+			
+		case Qt::Key_Escape:
+			reject();
+			break;
+		
+		default:
+			QDialog::keyPressEvent(event);
+			return;
+	}
+	event->accept();
 }

@@ -6,6 +6,10 @@
 #include <Core/IStorageByIdModel.h>
 #include <Model/OrderDetails.h>
 
+#define ORDER_NOTPAYED		0
+#define ORDER_CREDITED		1
+#define ORDER_PAYED			2
+
 class Order : public IStorageByIdModel
 {
     Q_OBJECT
@@ -17,6 +21,7 @@ class Order : public IStorageByIdModel
 	Q_PROPERTY(double summ READ getSumm WRITE getSumm NOTIFY summChanged STORED false)
 	Q_PROPERTY(int payment READ getPaymentType WRITE setPaymentType NOTIFY paymentTypeChanged)
 	Q_PROPERTY(QString comment READ getComment WRITE setComment NOTIFY commentChanged)
+	Q_PROPERTY(int pay_state READ getPayState WRITE setPayState NOTIFY payStateChanged)
 
     QDateTime m_creation_time;
     bool m_is_payed;
@@ -26,6 +31,8 @@ class Order : public IStorageByIdModel
 	int m_payment;
 	QString m_comment;
 	
+	int m_pay_state;
+
 public:
     Order();
     QDateTime getCreationTime() const
@@ -69,6 +76,11 @@ public:
 	}
 	
 	bool removeEmptyOrders();
+	
+	int getPayState() const
+	{
+		return m_pay_state;
+	}
 	
 public slots:
     void setCreationTime(QDateTime creation_time)
@@ -133,6 +145,15 @@ public slots:
 		emit commentChanged(comment);
 	}
 	
+	void setPayState(int pay_state)
+	{
+		if (m_pay_state == pay_state)
+			return;
+		
+		m_pay_state = pay_state;
+		emit payStateChanged(pay_state);
+	}
+	
 signals:
     void creationTimeChanged(QDateTime creation_time);
     void isPayedChanged(bool is_payed);
@@ -141,6 +162,7 @@ signals:
 	void summChanged(double summ);
 	void paymentTypeChanged(int payment);
 	void commentChanged(QString comment);
+	void payStateChanged(int pay_state);
 };
 
 #endif // ORDER_H

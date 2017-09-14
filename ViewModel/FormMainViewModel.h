@@ -36,6 +36,7 @@ private slots:
 	void showSettings();
 	
 	void showDetails(QModelIndex index);
+	void rowChanged(QModelIndex index);
 
 private:
     Ui::FormMain *ui;

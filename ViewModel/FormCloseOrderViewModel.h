@@ -18,6 +18,8 @@ public:
 	
 	void loadByOrderId(int orderId);
 	
+	int exec();
+	
 private slots:
 	void closeOrder();
 	void closeCredit();

@@ -12,15 +12,27 @@ class Logger : public QObject
 {
     Q_OBJECT
 public:
-    explicit Logger(QObject *parent = 0);
+	static Logger instance()
+    {
+        static Logger i;
+        return i;
+    }
+	
+	Logger operator << (QString value) { Q_UNUSED(value); return *this; }
+	Logger operator << (const char *value) { Q_UNUSED(value); return *this; }
+	Logger operator << (int value) { Q_UNUSED(value); return *this; }
+	Logger operator << (double value) { Q_UNUSED(value); return *this; }
+	
 
-signals:
-
-public slots:
+	Logger();
+    ~Logger();
+	Logger(const Logger&) : QObject() {}
+    void operator=(Logger const&);
+	
 };
 
 
-#define LOG_TRACE   qDebug() << "TRACE" << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << Q_FUNC_INFO
+#define LOG_TRACE   Logger::instance() << "TRACE" << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << Q_FUNC_INFO
 #define LOG_DEBUG   qDebug() << "DEBUG" << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << Q_FUNC_INFO
 #define LOG_ERROR   qDebug() << "ERROR" << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << Q_FUNC_INFO
 #define LOG_INFO    qDebug() << "INFO " << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")

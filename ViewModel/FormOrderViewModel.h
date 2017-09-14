@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <ViewModel/orderitemviewmodel.h>
+#include <ViewModel/OrderNameListViewModel.h>
 #include <ViewModel/CreatePositionViewModel.h>
 
 namespace Ui {
@@ -15,6 +16,7 @@ class FormOrderViewModel : public QDialog
 
 public:
     explicit FormOrderViewModel(QWidget *parent = 0);
+	~FormOrderViewModel();
 
     void loadOrder(int orderId);
     void loadOrder();
@@ -29,6 +31,11 @@ private:
     OrderItemViewModel *_orderItems;
 	CreatePositionViewModel *_createPosition;
 	Order *_order;
+	OrderNameListViewModel *_orderNames;
+	
+	// QWidget interface
+protected:
+	void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // FORMORDERVIEWMODEL_H

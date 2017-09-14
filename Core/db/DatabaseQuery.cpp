@@ -75,7 +75,7 @@ bool DatabaseQuery::first()
 bool DatabaseQuery::next(bool *hasRows)
 {
     int res = sqlite3_step(_stmt);
-    LOG_DEBUG << res;
+    //LOG_DEBUG << res;
 
     if (hasRows)
     {

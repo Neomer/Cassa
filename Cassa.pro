@@ -52,7 +52,10 @@ SOURCES += \
     ViewModel/FormResultsViewModel.cpp \
     ViewModel/FormRequestPasswordViewModel.cpp \
     ViewModel/FormSettingsViewModel.cpp \
-    View/TableView.cpp
+    View/TableView.cpp \
+    Model/OrderName.cpp \
+    ViewModel/FormInputValue.cpp \
+    ViewModel/OrderNameListViewModel.cpp
 
 HEADERS += \
     Core/Context.h \
@@ -82,7 +85,10 @@ HEADERS += \
     ViewModel/FormResultsViewModel.h \
     ViewModel/FormRequestPasswordViewModel.h \
     ViewModel/FormSettingsViewModel.h \
-    View/TableView.h
+    View/TableView.h \
+    Model/OrderName.h \
+    ViewModel/FormInputValue.h \
+    ViewModel/OrderNameListViewModel.h
 
 FORMS += \
     View/FormMain.ui \
@@ -93,7 +99,8 @@ FORMS += \
     View/FormCloseOrder.ui \
     View/FormResults.ui \
     View/FormPasswordRequest.ui \
-    View/FromSettings.ui
+    View/FromSettings.ui \
+    View/FromInputValue.ui
 
 INCLUDEPATH += $$PWD
 

@@ -40,12 +40,12 @@ QVariant OrderListViewModel::data(const QModelIndex &index, int role) const
 	{
 		switch (index.column())
 		{
-			case 0: return Qt::AlignRight;
-			case 1: return Qt::AlignCenter;
-			case 2: return Qt::AlignLeft;
-			case 3: return Qt::AlignRight;
-			case 4: return Qt::AlignCenter;
-			case 5: return Qt::AlignCenter;
+			case 0: return (int)(Qt::AlignRight | Qt::AlignVCenter);
+			case 1: return (int)(Qt::AlignCenter | Qt::AlignVCenter);
+			case 2: return (int)(Qt::AlignLeft | Qt::AlignVCenter);
+			case 3: return (int)(Qt::AlignRight | Qt::AlignVCenter);
+			case 4: return (int)(Qt::AlignCenter | Qt::AlignVCenter);
+			case 5: return (int)(Qt::AlignCenter | Qt::AlignVCenter);
 		}
 	}
 	else if (role == Qt::DisplayRole)
@@ -61,7 +61,18 @@ QVariant OrderListViewModel::data(const QModelIndex &index, int role) const
 			case 1: return o->getCreationTime().toString("dd MMM hh:mm");
 			case 2: return o->getBuyer();
 			case 3: return QString::number(o->getSumm(), 'f', 2);
-			case 4: return o->getIsPayed() ? "Оплачен" : o->getIsCredited() ? "В долг" : "-";
+			case 4: 
+			{
+				switch (o->getPayState())
+				{
+					case ORDER_NOTPAYED:
+						return "-";
+					case ORDER_CREDITED:
+						return "В долг";
+					case ORDER_PAYED:
+						return "Оплачен";
+				}
+			}
 			case 5:
 			{
 				switch(o->getPaymentType())

@@ -36,6 +36,13 @@ void FormCloseOrderViewModel::loadByOrderId(int orderId)
 	ui->lblSumm->setText(QString::number(o->getSumm(), 'f', 2));
 }
 
+int FormCloseOrderViewModel::exec()
+{
+	ui->txtComment->clear();
+	
+	return QDialog::exec();
+}
+
 void FormCloseOrderViewModel::closeOrder()
 {
 	LOG_TRACE;
@@ -53,6 +60,7 @@ void FormCloseOrderViewModel::closeOrder()
 	o->setIsPayed(true);
 	o->setIsCredited(false);
 	o->setPaymentType(payType);
+	o->setPayState(ORDER_PAYED);
 	o->setComment(ui->txtComment->toPlainText());
 	if (!o->update())
 	{
@@ -67,5 +75,18 @@ void FormCloseOrderViewModel::closeCredit()
 {
 	LOG_TRACE;
 	
+	
+	o->setIsPayed(false);
+	o->setIsCredited(true);
+	o->setPaymentType(0);
+	o->setPayState(ORDER_CREDITED);
+	o->setComment(ui->txtComment->toPlainText());
+	if (!o->update())
+	{
+		GuiUtils::showError("Не удалось записать изменения в базу данных!");
+		reject();
+		return;
+	}
+	accept();
 }
 

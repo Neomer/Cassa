@@ -38,6 +38,7 @@ FormMainViewModel::FormMainViewModel(QWidget *parent) :
 	connect(actSettings, SIGNAL(triggered(bool)), this, SLOT(showSettings()));	
 	
 	connect(ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(showDetails(QModelIndex)));
+	connect(ui->tableView, SIGNAL(clicked(QModelIndex)), this, SLOT(rowChanged(QModelIndex)));
 
 	QDir dir(qApp->applicationDirPath());
     if (!_pixmap.load(dir.absoluteFilePath("circle.png")))
@@ -86,6 +87,7 @@ void FormMainViewModel::createOrder()
     o.setCreationTime(QDateTime::currentDateTime());
     o.setIsCredited(false);
     o.setIsPayed(false);
+	o.setPayState(ORDER_NOTPAYED);
     o.setBuyer("");
     if (o.insert())
     {
@@ -98,7 +100,7 @@ void FormMainViewModel::createOrder()
     }
 
     _orderView->loadOrder(o.getId());
-    int res = _orderView->exec();
+    _orderView->exec();
 	if (o.getOrderDetails().count() == 0)
 	{
 		if (!o.remove())
@@ -106,10 +108,7 @@ void FormMainViewModel::createOrder()
 			GuiUtils::showError("Не удалось записать в базу данных!");
 		}
 	}
-	if (res == QDialog::Accepted)
-	{
-		resetModel();
-	}
+	resetModel();
 }
 
 void FormMainViewModel::closeOrder()
@@ -195,6 +194,10 @@ void FormMainViewModel::showDetails(QModelIndex index)
 	LOG_TRACE << index.row();
 	Order *o = _orderList->order();
 	o->at(index.row());
+	if (o->getIsPayed())
+	{
+		GuiUtils::showError("Заказ уже оплачен!");
+	}
 	_orderView->loadOrder(o->getId());
 	int res = _orderView->exec();
 	o->at(index.row());
@@ -211,6 +214,13 @@ void FormMainViewModel::showDetails(QModelIndex index)
 	{
 		resetModel();
 	}
+}
+
+void FormMainViewModel::rowChanged(QModelIndex index)
+{
+	LOG_TRACE;
+	_orderList->order()->at(index.row());
+	ui->cmdCloseOrder->setEnabled(!_orderList->order()->getIsPayed());
 }
 
 void FormMainViewModel::resizeEvent(QResizeEvent *e)

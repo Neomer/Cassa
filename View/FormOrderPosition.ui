@@ -137,6 +137,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tv</tabstop>
+  <tabstop>txtQuantity</tabstop>
+  <tabstop>cmdSelect</tabstop>
+  <tabstop>cmdCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

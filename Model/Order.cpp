@@ -41,7 +41,7 @@ bool Order::selectOrdersWithSumm()
 	LOG_TRACE;
 	
 	try {
-		IStorageModel::execute("select o.*, sum(cost) as summ from [Order] o left join OrderDetails od on od.order_id = o.id group by o.id order by o.is_credited, o.is_payed, o.buyer;");
+		IStorageModel::execute("select o.*, sum(cost) as summ from [Order] o left join OrderDetails od on od.order_id = o.id group by o.id order by o.pay_state asc, o.buyer;");
 		parseStatement();
 		
 		return true;

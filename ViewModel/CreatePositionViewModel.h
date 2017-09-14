@@ -5,6 +5,7 @@
 #include <QDialog>
 
 #include <ViewModel/ProductViewModel.h>
+#include <ViewModel/FormInputValue.h>
 
 namespace Ui {
     class FormOrderPosition;
@@ -28,6 +29,7 @@ private:
 	
 	ProductViewModel *_products;
 	int _orderId;
+	FormInputValue *_inputValueView;
 	
 protected:
 	void keyPressEvent(QKeyEvent *event);
